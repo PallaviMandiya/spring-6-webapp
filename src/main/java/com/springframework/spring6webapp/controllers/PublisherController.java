@@ -39,8 +39,7 @@ public class PublisherController {
 
     @GetMapping(value = "/search/publisherByName")
     public ResponseEntity<Object> getPublisherByName(@RequestParam("publisherName") String publisherName, HttpServletRequest request){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", request.getRequestURI());
+        HttpHeaders headers = new HttpHeaders();headers.add("Location", request.getRequestURI());
         if(publisherService.getPublisherByName(publisherName).isEmpty()){
             return ResponseHandler.responseBuilder("No Publisher Matched", HttpStatus.NOT_FOUND, headers, publisherService.getPublisherByName(publisherName));
         }
