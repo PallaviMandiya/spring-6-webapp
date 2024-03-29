@@ -4,6 +4,7 @@ import com.springframework.spring6webapp.domain.Author;
 import com.springframework.spring6webapp.domain.Publisher;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;

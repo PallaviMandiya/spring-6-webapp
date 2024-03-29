@@ -2,8 +2,7 @@ package com.springframework.spring6webapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +10,9 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Author{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

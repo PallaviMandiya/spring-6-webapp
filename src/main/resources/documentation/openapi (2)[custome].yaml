@@ -1,0 +1,594 @@
+openapi: 3.0.3
+info:
+  title: Book Service
+  description: |-
+    This is a sample Book Service.
+    
+    Some useful links:
+    - [Book Service On Swagger](http://localhost:8080/v1/swagger-ui/index.html)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: publisher
+    description: Everything about publisher
+    externalDocs:
+      description: Find out more about publisher
+      url: http://swagger.io
+  - name: book
+    description: Everything about book
+    externalDocs:
+      description: Find out more about book
+      url: http://swagger.io
+  - name: author
+    description: Operations about author
+    externalDocs:
+      description: Find out more about author
+      url: http://swagger.io
+paths:
+  /publisher/updatePublisher/{id}:
+    put:
+      tags:
+        - publisher
+      summary: Update an existing publisher
+      description: Update an existing publisher by Id
+      operationId: updatePublisher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent publisher
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublisherDTO'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Publisher Not Found
+  /publisher/savePublisher:
+    post:
+      tags:
+        - publisher
+      summary: Add a new publisher
+      description: Add a new publisher
+      operationId: savePublisher
+      requestBody:
+        description: Create a new publisher
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublisherDTO'
+        required: true
+      responses:
+        '201':
+          description: New Publisher Saved
+          content:
+            '*/*':
+              schema:
+                type: object
+  /publisher/search/publisherById/{id}:
+    get:
+      tags:
+        - publisher
+      summary: Finds publisher by id
+      operationId: findPublishersById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: nt64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Publiaher Not Found
+  /publisher/search/publisherByName:
+    get:
+      tags:
+        - publisher
+      summary: Finds publisher by name
+      operationId: findPublishersByName
+      parameters:
+        - name: publisherName
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Publiaher Not Found
+  /publisher/patchPublisher/{id}:
+    patch:
+      tags:
+        - publisher
+      summary: Patches Publisher By Id
+      description: ''
+      operationId: patchPublisher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Patch an existent publisher
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublisherDTO'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Publisher Not Found
+  /publisher/deletePublisher/{id}:
+    delete:
+      tags:
+        - publisher
+      summary: Deletes a publisher
+      description: delete a publisher
+      operationId: deletePublisher
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Publisher Deleted
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Publisher Not Found
+  /publisher/allPublisher:
+    get:
+      tags:
+        - publisher
+      summary: Get All Publisher
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: object
+
+  /author/updateAuthor/{id}:
+    put:
+      tags:
+        - author
+      summary: Update an existing author
+      description: Update an existing author by Id
+      operationId: updateAuthor
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: Uodate an existing author
+        content:
+          application/jason:
+            schema:
+              $ref: '#/components/schemas/AuthorDTO'
+        required: true
+      responses:
+        '200':
+          description: Author Updated
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Author Not Found
+  /author/saveAuthor:
+    post:
+      tags:
+        - author
+      summary: Add a new author
+      description: Add a new author
+      operationId: saveAuthor
+      requestBody:
+        description: Create a new author
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorDTO'
+        required: true
+      responses:
+        '201':
+          description: New author Saved
+          content:
+            '*/*':
+              schema:
+                type: object
+  /author/search/authorById/{id}:
+    get:
+      tags:
+        - author
+      summary: Finds author by id
+      description: Finds author by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Author Not Found
+  /author/patchAuthor/{id}:
+    patch:
+      tags:
+        - author
+      summary: Patches Publisher By Id
+      description: ''
+      operationId: patchAuthor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Patche an existing author by Id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorDTO'
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Author Not Found
+  /author/deleteAuthor/{id}:
+    delete:
+      tags:
+        - author
+      summary: Delete an author
+      description: Deletes Author by
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Author Deleted
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Author Not Found
+  /author/allAuthor:
+    get:
+      tags:
+        - author
+      summary: Get All Author
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: object
+  /book/updateBook/{id}:
+    put:
+      tags:
+        - book
+      summary: Update Book
+      description: Update Book by Id
+      operationId: updateBook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existing book
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDTO'
+      responses:
+        '200':
+          description: Book updated
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Book Not Found
+  /book/saveBook:
+    post:
+      tags:
+        - book
+      summary: Add a new book
+      description: Add a new Book
+      operationId: saveBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDTO'
+        required: true
+      responses:
+        '201':
+          description: Book Saved
+          content:
+            '*/*':
+              schema:
+                type: object
+  /book/setAuthor:
+    post:
+      tags:
+        - book
+      summary: Set author in book
+      operationId: setAuthor
+      parameters:
+        - name: aid
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: bid
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: string
+  /book/setPublisher:
+    post:
+      tags:
+        - book
+      summary: Set publisher in book
+      operationId: setPublisher
+      parameters:
+        - name: pid
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: bid
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Publisher Or Book Not Found
+  /book/search/bookById/{id}:
+    get:
+      tags:
+        - book
+      summary: Find Book By Id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Book Not Found
+  /book/search/bookByTitle:
+    get:
+      tags:
+        - book
+      summary: Find book by title
+      operationId: findByTitle
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Book Not Found
+  /book/patchBook/{id}:
+    patch:
+      tags:
+        - book
+      summary: Patch a book
+      description: Patch existing book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDTO'
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Book Not Found
+  /book/deleteBook/{id}:
+    delete:
+      tags:
+        - book
+      summary: Delete a book
+      description: Delete a book by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Book Deleted
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Book Not Found
+  /book/allBooks:
+    get:
+      tags:
+        - book
+      summary: Get All Books
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                type: object
+components:
+  schemas:
+    PublisherDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        publisherName:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: string
+      xml:
+        name: publisher
+    AuthorDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstname:
+          type: string
+        lastname:
+          type: string
+      xml:
+        name: author
+    BookDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        isbn:
+          type: string
+        authors:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AuthorDTO'
+        publisher:
+          type: object
+          items:
+            $ref: '#/components/schemas/PublisherDTO'
+          xml:
+            name: book

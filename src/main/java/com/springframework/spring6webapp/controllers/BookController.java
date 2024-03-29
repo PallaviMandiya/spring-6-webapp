@@ -14,6 +14,7 @@ import com.springframework.spring6webapp.services.PublisherService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,16 @@ public class BookController {
     @Autowired
     private PublisherService publisherService;
 
+    @GetMapping(value = "/books")
+    public ResponseEntity getBooks(@RequestParam(required = false) String title,
+                                   @RequestParam(required = false) Integer pageNumber,
+                                   @RequestParam(required = false) Integer pageSize,
+                                   HttpServletRequest request)
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", request.getRequestURI() + "/" + title);
+        return ResponseHandler.responseBuilder("", HttpStatus.OK, headers, bookService.bookList(title, pageNumber,pageSize));
+    }
     @GetMapping(value = "/getAllBooks")
     public ResponseEntity<Object> getBooks(HttpServletRequest request){
         HttpHeaders headers = new HttpHeaders();
@@ -76,7 +87,7 @@ public class BookController {
         headers.add("Location", request.getRequestURI());
         if(bookService.updateBook(id, book)){
             bookService.updateBook(id, book);
-        return ResponseHandler.responseBuilder("Book Updated Successfully", HttpStatus.OK,headers);
+            return ResponseHandler.responseBuilder("Book Updated Successfully", HttpStatus.OK,headers);
         }
         return ResponseHandler.responseBuilder("Book Not Found", HttpStatus.NOT_FOUND,headers);
     }
@@ -84,14 +95,9 @@ public class BookController {
     @DeleteMapping(value = "/deleteBook/{id}")
     public ResponseEntity deleteBook(@PathVariable("id") Long id, HttpServletRequest request){
         if(bookService.deleteBook(id)){
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", request.getRequestURI());
-            return ResponseHandler.responseBuilder("Book Deleted", HttpStatus.OK, headers);
+            return ResponseHandler.responseBuilder("Book Deleted", HttpStatus.OK);
         }
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", request.getRequestURI());
-        return ResponseHandler.responseBuilder("Book Not Found For Id: "+ id.toString(), HttpStatus.OK, headers);
+        return ResponseHandler.responseBuilder("Book Not Found For Id: "+ id.toString(), HttpStatus.OK);
     }
 
     @PatchMapping(value = "/patchBook/{id}")
@@ -119,7 +125,7 @@ public class BookController {
                                        @RequestParam("bid") Long bid,
                                        HttpServletRequest request){
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", request.getRequestURI());
+        headers.add("Location", request.getRequestURI() + "?pid=" + pid + "&bid=" + bid);
 
         Optional<BookDTO> optionalBook = bookService.getBookById(bid);
         Optional<PublisherDTO> optionalPublisher = publisherService.getPublisherById(pid);

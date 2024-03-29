@@ -24,11 +24,22 @@ public class AuthorController {
     @Autowired
     BookService bookService;
 
+    @GetMapping("/authors")
+    public ResponseEntity listAuthors(@RequestParam(required = false) String firstname,
+                                      @RequestParam(required = false) String lastname,
+                                      @RequestParam(required = false) Integer pageNumber,
+                                      @RequestParam(required = false) Integer pageSize,
+                                      HttpServletRequest request){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", request.getRequestURI());
+        return ResponseHandler.responseBuilder("", HttpStatus.OK, headers, authorService.listAuthors(firstname, lastname, pageNumber, pageSize));
+    }
+
     @GetMapping(value = "/getAllAuthors")
     public ResponseEntity<Object> getAuthors(HttpServletRequest request){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", request.getRequestURI());
-        return ResponseHandler.responseBuilder("All Authors", HttpStatus.OK, headers, authorService.findAll());
+        return ResponseHandler.responseBuilder("All Authors", HttpStatus.OK, headers, authorService.getAll());
     }
 
     @GetMapping(value = "/search/authorById/{id}")

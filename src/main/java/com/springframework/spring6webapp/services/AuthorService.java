@@ -2,11 +2,12 @@ package com.springframework.spring6webapp.services;
 
 import com.springframework.spring6webapp.domain.Author;
 import com.springframework.spring6webapp.dtos.AuthorDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.Optional;
 
 public interface AuthorService {
-    Iterable<AuthorDTO> findAll();
+    Iterable<AuthorDTO> getAll();
 
     void saveAuthor(AuthorDTO author);
 
@@ -17,4 +18,6 @@ public interface AuthorService {
     Optional<AuthorDTO> getAuthorById(Long id);
 
     boolean patchAuthor(Long id, AuthorDTO author);
+
+    Page<AuthorDTO> listAuthors(String firstname, String lastname, Integer pageNumber, Integer pageSize);
 }

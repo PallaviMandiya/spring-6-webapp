@@ -29,6 +29,18 @@ public class PublisherController {
     @Autowired
     private BookService bookService;
 
+    @GetMapping(value = "/publishers")
+    public ResponseEntity getPublisher(@RequestParam(required = false) String publisher_name,
+                                     @RequestParam(required = false) String city,
+                                     @RequestParam(required = false) String state,
+                                     @RequestParam(required = false) Integer pageNumber,
+                                     @RequestParam(required = false) Integer pageSize,
+                                     HttpServletRequest request){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", request.getRequestURI());
+        return ResponseHandler.responseBuilder("", HttpStatus.OK, headers, publisherService.publisherList(publisher_name, city, state, pageNumber, pageSize));
+    }
+
     @GetMapping(value = "/allPublisher")
     public ResponseEntity<Object> getAllPublisher(HttpServletRequest request){
 

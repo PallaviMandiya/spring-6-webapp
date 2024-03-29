@@ -1,11 +1,19 @@
 package com.springframework.spring6webapp.services;
 
+import ch.qos.logback.core.util.DelayStrategy;
+import com.springframework.spring6webapp.domain.Book;
 import com.springframework.spring6webapp.domain.Publisher;
 import com.springframework.spring6webapp.dtos.PublisherDTO;
 import com.springframework.spring6webapp.mapper.PublisherMapper;
+import com.springframework.spring6webapp.repository.BookRepository;
 import com.springframework.spring6webapp.repository.PublisherRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +31,11 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Autowired
     private PublisherMapper publisherMapper;
+    @Autowired
+    private BookRepository bookRepository;
+
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_PAGE_SIZE = 5;
 
     @Override
     public Iterable<PublisherDTO> getAllPublisher() {
@@ -55,9 +68,13 @@ public class PublisherServiceImpl implements PublisherService {
         return false;
     }
 
+    @Transactional
     @Override
     public boolean deletePublisher(Long id) {
         if(publisherRepository.existsById(id)){
+            for(Book book: bookRepository.findByPublisherId(id)){
+                book.setPublisher(null);
+            }
             publisherRepository.deleteById(id);
             return true;
         }
@@ -109,6 +126,53 @@ public class PublisherServiceImpl implements PublisherService {
             publisherDTOS.add(publisherMapper.publisherToPublisherDto(publisher));
         }
         return publisherDTOS;
+    }
+
+    @Override
+    public Page<PublisherDTO> publisherList(String publisherName, String city, String state, Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+        Page<Publisher> publisherPage;
+        if(StringUtils.hasText(publisherName)){
+            publisherPage = listPublisherByPublisherName(publisherName, pageRequest);
+        } else if (StringUtils.hasText(city)) {
+            publisherPage = listPublisherByCity(city, pageRequest);
+        } else if (StringUtils.hasText(state)) {
+            publisherPage = listPublisherByState(state, pageRequest);
+        } else{
+            publisherPage = publisherRepository.findAll(pageRequest);
+        }
+
+        return publisherPage.map(publisherMapper::publisherToPublisherDto);
+    }
+
+    public Page<Publisher> listPublisherByState(String state, Pageable pageable) {
+        return publisherRepository.findAllByStateIsLikeIgnoreCase("%" + state + "%", pageable);
+    }
+
+    public Page<Publisher> listPublisherByCity(String city, Pageable pageable) {
+        return publisherRepository.findAllByCityIsLikeIgnoreCase("%" + city + "%", pageable);
+    }
+
+    public Page<Publisher> listPublisherByPublisherName(String publisherName, Pageable pageable) {
+        return publisherRepository.findAllByPublisherNameIsLikeIgnoreCase("%" + publisherName + "%", pageable);
+    }
+
+    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+        int queryPageNumber;
+        int queryPageSize;
+        if(pageNumber != null && pageNumber > 0){
+            queryPageNumber = pageNumber - 1;
+        }else{
+            queryPageNumber = DEFAULT_PAGE;
+        }
+        if(pageSize > 1000){
+            queryPageSize = 1000;
+        }else{
+            queryPageSize = DEFAULT_PAGE_SIZE;
+        }
+
+        Sort sort = Sort.by(Sort.Order.asc("publisherName"));
+        return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 }
 

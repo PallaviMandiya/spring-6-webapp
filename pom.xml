@@ -66,6 +66,17 @@
 			<artifactId>springdoc-openapi-starter-common</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-security</artifactId>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.security</groupId>-->
+<!--			<artifactId>spring-security-config</artifactId>-->
+<!--			<version>5.5.1</version> &lt;!&ndash; Or the version you are using &ndash;&gt;-->
+<!--		</dependency>-->
+
 	</dependencies>
 
 	<build>
